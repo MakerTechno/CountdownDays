@@ -1,0 +1,90 @@
+plugins {
+    id 'java'
+    id 'idea'
+    id 'application'
+}
+
+group = 'works.makertechno.countdown'
+version = '1.0-SNAPSHOT'
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // JetBrains Annotations
+    implementation 'org.jetbrains:annotations:24.0.1'
+
+    // Log4j2核心实现
+    implementation 'org.apache.logging.log4j:log4j-core:2.20.0'
+
+    // Log4j2 API接口
+    implementation 'org.apache.logging.log4j:log4j-api:2.20.0'
+
+    // SLF4J到Log4j2的桥接包（使SLF4J接口使用Log4j2实现）
+    implementation 'org.apache.logging.log4j:log4j-slf4j2-impl:2.20.0'
+
+    // SLF4J API接口
+    implementation 'org.slf4j:slf4j-api:2.0.9'
+
+    // Apache POI核心库
+    implementation 'org.apache.poi:poi:5.2.3'
+
+    // Apache POI OOXML支持（处理xlsx等新格式）
+    implementation 'org.apache.poi:poi-ooxml:5.2.3'
+
+    // JNA
+    implementation 'net.java.dev.jna:jna:5.14.0'
+    implementation 'net.java.dev.jna:jna-platform:5.14.0'
+
+    // Jackson data
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.2'
+
+    // 单元测试依赖
+}
+
+// 设置主类
+application {
+    mainClass = 'works.makertechno.countdown.CountdownApp'
+}
+
+// 打包成可执行 jar（包含所有依赖）
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'works.makertechno.countdown.CountdownApp'
+        )
+    }
+    // 可选：如果不需要"胖 jar"（包含依赖的打包），可以注释掉下面这行
+    // from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+    // 避免重复签名导致的冲突
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+// 创建一个包含所有依赖的"胖 jar"任务
+task fatJar(type: Jar) {
+    archiveBaseName = 'CountdownDays'
+    archiveVersion = ''
+    manifest {
+        attributes(
+                'Main-Class': 'works.makertechno.countdown.CountdownApp'
+        )
+    }
+    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+idea {
+    module {
+        downloadSources = true
+        downloadJavadoc = true
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
