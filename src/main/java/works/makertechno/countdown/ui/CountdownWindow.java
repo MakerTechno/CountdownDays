@@ -371,7 +371,7 @@ public class CountdownWindow extends JFrame {
 
     private void openSettings() {
         // 获取当前开机自启动状态
-        boolean currentAutoStart = cachedConfig != null && cachedConfig.isAutoStart();
+        boolean currentAutoStart = cachedConfig != null && cachedConfig.isAutoStart() || AutoStartManager.isAutoStartEnabled();;
 
         SettingsDialog dialog = new SettingsDialog(
                 this, i18n, data, textColor, transPath,
