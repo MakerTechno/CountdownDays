@@ -63,7 +63,7 @@ public class CountdownWindow extends JFrame {
     // 保存防抖定时器
     private Timer saveDebounceTimer;
     // 组件管理器
-    private ComponentManager componentManager;
+    private final ComponentManager componentManager;
 
     public CountdownWindow(I18n i18n, CountdownData data, Color textColorIn, Path transPath, boolean showYearsMonthsDays) {
         this.i18n = i18n;
